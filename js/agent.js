@@ -218,10 +218,71 @@
 
   const MENU_QUICK = [
     { label: 'Get a free estimate', value: 'estimate' },
+    { label: 'Speak to a live person', value: 'live' },
     { label: 'What services do you offer?', value: 'services' },
     { label: 'Do you serve my area?', value: 'areas' },
     { label: 'Hours & contact', value: 'hours' },
   ];
+
+  // Lead endpoint — free FormSubmit relay to the business inbox (lands on Pop's phone).
+  const LIVE_ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com';
+
+  // ============================================================
+  // "Speak to a live person" — the special direct-line box.
+  // Feels personal, but routes to the same lead flow as the quote form.
+  // ============================================================
+  function startLiveChat() {
+    clearQuick();
+    reply('Putting you through to the family. Pop answers every message personally.', null);
+    const div = document.createElement('div');
+    div.className = 'chat__live';
+    div.innerHTML =
+      '<div class="chat__live-head">' +
+        '<span class="chat__live-avatar">A</span>' +
+        '<div><strong>The Archats family</strong><span>● Live · replies fast</span></div>' +
+      '</div>' +
+      '<div class="chat__live-form">' +
+        '<input type="text" class="live-name" placeholder="Your name" />' +
+        '<input type="tel" class="live-phone" placeholder="Phone number" />' +
+        '<textarea class="live-msg" rows="2" placeholder="What are you working on?"></textarea>' +
+        '<button type="button" class="live-submit btn btn--solid">Send to Pop</button>' +
+        '<p class="lead-err"></p>' +
+      '</div>' +
+      '<p class="chat__live-note">This goes straight to the family — no bots, no call centers. You will get a text or call back shortly.</p>';
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    div.querySelector('.live-submit').addEventListener('click', () => {
+      const name = div.querySelector('.live-name').value.trim();
+      const phone = div.querySelector('.live-phone').value.trim();
+      const msg = div.querySelector('.live-msg').value.trim();
+      const err = div.querySelector('.lead-err');
+      if (!name || !phone) {
+        err.textContent = 'Please add your name and phone number so Pop can reach you.';
+        return;
+      }
+      err.textContent = '';
+      div.querySelector('.live-submit').disabled = true;
+      fetch(LIVE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'LIVE PERSON lead — ' + name,
+          name: name, phone: phone, message: msg || 'No message',
+          _template: 'table',
+        }),
+      })
+        .then((r) => r.json())
+        .then(() => {
+          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>● Sent to Pop</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Your message is in. Expect a text or call back shortly — usually the same day. Thanks for reaching out to the family. 🙌</p>';
+          chatBody.scrollTop = chatBody.scrollHeight;
+        })
+        .catch(() => {
+          err.textContent = 'Could not send. Please call (917) 780-9790 — Pop picks up.';
+          div.querySelector('.live-submit').disabled = false;
+        });
+    });
+  }
 
   function route(t) {
     // --- greeting ---
@@ -245,6 +306,12 @@
     // --- estimate / booking trigger ---
     if (has(t, ['estimate', 'quote', 'book', 'schedule', 'appointment', 'pricing', 'price', 'cost', 'how much', 'get started', 'start a project', 'interested', 'hire', 'free consult', 'free consultation'])) {
       startLeadCapture();
+      return;
+    }
+
+    // --- live person (special direct line) ---
+    if (has(t, ['live', 'live person', 'speak to a live', 'talk to a live', 'real human', 'human being', 'pop'])) {
+      startLiveChat();
       return;
     }
 

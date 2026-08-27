@@ -47,19 +47,38 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
 
 // Chat widget logic lives in agent.js
 
-// Estimate form (placeholder success state)
-const form = document.getElementById('estimateForm');
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+// Estimate form → real lead delivery (FormSubmit relay → business inbox / Pop's phone)
+(function () {
+  const form = document.getElementById('estimateForm');
+  if (!form) return;
+  const ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com';
   const btn = form.querySelector('button[type="submit"]');
-  btn.textContent = 'Request Sent ✓';
-  btn.style.background = '#22c55e';
-  form.reset();
-  setTimeout(() => {
-    btn.textContent = 'Request Free Estimate';
-    btn.style.background = '';
-  }, 3200);
-});
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    const fd = new FormData(form);
+    const payload = {
+      _subject: 'Quote request — ' + (fd.get('name') || ''),
+      name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email'),
+      service: fd.get('service'), message: fd.get('message') || '',
+      _template: 'table',
+    };
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then((r) => r.json())
+      .then(() => {
+        form.innerHTML = '<div style="text-align:center;padding:30px 10px;"><h3 style="color:var(--navy);margin:0 0 8px;">Request received!</h3><p style="color:#6b7280;margin:0;">Thanks — the family will reach out shortly, usually the same day.</p></div>';
+      })
+      .catch(() => {
+        if (btn) { btn.disabled = false; btn.textContent = 'Request Free Estimate'; }
+        alert('Something went wrong. Please call (917) 780-9790 — Pop picks up.');
+      });
+  });
+})();
 
 // ---------- Scroll progress bar ----------
 const progress = document.getElementById('progressBar');
