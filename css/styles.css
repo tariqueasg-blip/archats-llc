@@ -749,3 +749,7 @@ body.preview-mode .dev-toolbar { display: none; }
   .reel-card video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); background: #000; display: block; }
   .reel-card figcaption { margin-top: 10px; font-size: 13px; color: var(--navy); text-align: center; font-weight: 600; }
   @media (max-width: 720px) { .reels__row { grid-template-columns: 1fr; } }
+
+  /* Subtle BBB badge — quiet credibility, not a billboard */
+  .footer__bbb { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.55); }
+  .footer__bbb svg { width: 13px; height: 13px; }
