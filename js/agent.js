@@ -101,6 +101,7 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = label;
+      if (value === 'live') b.className = 'chat__quick--live';
       b.addEventListener('click', () => handleQuick(label, value));
       div.appendChild(b);
     });
@@ -224,8 +225,10 @@
     { label: 'Speak to a live person', value: 'live' },
   ];
 
-  // Lead endpoint — free FormSubmit relay to the business inbox (lands on Pop's phone).
-  const LIVE_ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com';
+  // Lead endpoint — free FormSubmit relay. Change LEAD_EMAIL to deliver elsewhere.
+  const LEAD_EMAIL = 'archatsllc@gmail.com';
+  const LIVE_ENDPOINT = 'https://formsubmit.co/ajax/' + LEAD_EMAIL;
+  const BIZ_PHONE = '917-780-9790'; // included in every lead so we're always ready to call back
 
   // ============================================================
   // "Speak to a live person" — the special direct-line box.
@@ -269,6 +272,7 @@
         body: JSON.stringify({
           _subject: 'Direct message — ' + name,
           name: name, phone: phone, message: msg || 'No message',
+          callback: BIZ_PHONE,
           _template: 'table',
         }),
       })

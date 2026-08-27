@@ -831,3 +831,15 @@ body.preview-mode .dev-toolbar { display: none; }
     background: #fff; color: var(--navy);
   }
   .chat__live-note { font-size: 11.5px; color: rgba(13,27,42,0.55); margin: 4px 0 0; }
+
+  /* Featured "Speak to a live person" option — the one button we want them to tap */
+  .chat__quick--live {
+    background: linear-gradient(135deg, #f2590b, var(--orange));
+    border-color: transparent; color: #fff; font-weight: 600;
+    box-shadow: 0 4px 14px rgba(232, 84, 10, 0.32);
+  }
+  .chat__quick--live:hover {
+    border-color: transparent; color: #fff;
+    background: linear-gradient(135deg, #ff6a1a, #e8540a);
+    box-shadow: 0 6px 18px rgba(232, 84, 10, 0.42);
+  }

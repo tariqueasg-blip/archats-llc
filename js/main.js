@@ -51,7 +51,7 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
 (function () {
   const form = document.getElementById('estimateForm');
   if (!form) return;
-  const ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com';
+  const ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com'; // swap email here to re-route leads
   const btn = form.querySelector('button[type="submit"]');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -62,6 +62,7 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
       _subject: 'Quote request — ' + (fd.get('name') || ''),
       name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email'),
       service: fd.get('service'), message: fd.get('message') || '',
+      callback: '917-780-9790',
       _template: 'table',
     };
     fetch(ENDPOINT, {
@@ -113,22 +114,6 @@ const countIO = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 counters.forEach((c) => countIO.observe(c));
-
-// ---------- Mobile preview ----------
-const deviceModal = document.getElementById('deviceModal');
-const deviceToggle = document.getElementById('deviceToggle');
-const openDevice = (open) => {
-  deviceModal.classList.toggle('open', open);
-  deviceModal.setAttribute('aria-hidden', String(!open));
-};
-deviceToggle.addEventListener('click', () => openDevice(true));
-document.getElementById('deviceClose').addEventListener('click', () => openDevice(false));
-document.getElementById('deviceBackdrop').addEventListener('click', () => openDevice(false));
-
-// Hide dev toolbar inside the mobile preview iframe (keep editor.js intact)
-if (new URLSearchParams(location.search).has('preview')) {
-  document.body.classList.add('preview-mode');
-}
 
 // ── Gallery video tiles: hover preview + tap-to-expand full playback ──
 (function () {
