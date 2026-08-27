@@ -738,3 +738,14 @@ body.preview-mode .dev-toolbar { display: none; }
   .field-hero__tint::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(9,9,11,0.55) 0%, transparent 40%); }
   .hero--photo-band { min-height: 62vh; }
   .hero--photo-band .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Full project reels (work section) */
+  .reels { margin-top: 64px; }
+  .reels__head { text-align: center; margin-bottom: 28px; }
+  .reels__title { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--navy); margin: 0 0 6px; }
+  .reels__sub { font-size: 14px; color: var(--muted, #6b7280); margin: 0; }
+  .reels__row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .reel-card { margin: 0; }
+  .reel-card video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); background: #000; display: block; }
+  .reel-card figcaption { margin-top: 10px; font-size: 13px; color: var(--navy); text-align: center; font-weight: 600; }
+  @media (max-width: 720px) { .reels__row { grid-template-columns: 1fr; } }
