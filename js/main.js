@@ -113,25 +113,28 @@ if (new URLSearchParams(location.search).has('preview')) {
 
 // ── Gallery video tiles: hover preview + tap-to-expand full playback ──
 (function () {
-  const modal = document.getElementById('galleryModal');
-  const mVideo = document.getElementById('galleryModalVideo');
+  const $ = (id) => document.getElementById(id);
   const tiles = document.querySelectorAll('.gallery__item--video');
+  function mVideo() { return $('galleryModalVideo'); }
+  function modal() { return $('galleryModal'); }
   let active = null;
 
   function openModal(src) {
-    mVideo.src = src;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
+    const mv = mVideo(), md = modal();
+    if (!mv || !md) return;
+    mv.src = src;
+    md.classList.add('open');
+    md.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    mVideo.play().catch(function () {});
+    mv.play().catch(function () {});
   }
   function closeModal() {
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
+    const mv = mVideo(), md = modal();
+    if (!md) return;
+    md.classList.remove('open');
+    md.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    mVideo.pause();
-    mVideo.removeAttribute('src');
-    mVideo.load();
+    if (mv) { mv.pause(); mv.removeAttribute('src'); mv.load(); }
   }
 
   tiles.forEach(function (tile) {
