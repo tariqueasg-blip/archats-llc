@@ -705,3 +705,11 @@ body.preview-mode .dev-toolbar { display: none; }
   display: inline-flex; align-items: center;
 }
 .footer__logo-chip .brand__logo { height: 44px; }
+
+  /* Work-in-motion video cards */
+  .video-row { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; }
+  .video-card { width: min(280px, 42vw); margin: 0; }
+  .video-card video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--radius); background: #000; border: 1px solid rgba(255,255,255,0.12); display: block; }
+  .video-card figcaption { margin-top: 12px; font-size: 13.5px; color: rgba(255,255,255,0.72); text-align: center; }
+  .video-note { text-align: center; margin-top: 26px; font-size: 12.5px; color: rgba(255,255,255,0.45); }
+  .section__lead--light { color: rgba(255,255,255,0.72); }
