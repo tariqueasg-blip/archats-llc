@@ -730,3 +730,11 @@ body.preview-mode .dev-toolbar { display: none; }
   @media (prefers-reduced-motion: reduce) { .field-hero__bg { display: none; } .field-hero__tint { background: var(--black); } }
 
   .hero--mid { min-height: 72vh; }
+
+  /* Video hero with the welcome content (left-aligned, like the photo hero) */
+  .field-hero { padding: 0; }
+  .field-hero .hero__inner { position: relative; z-index: 2; }
+  .field-hero__tint::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(9,9,11,0.72) 0%, rgba(9,9,11,0.45) 55%, rgba(9,9,11,0.25) 100%); }
+  .field-hero__tint::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(9,9,11,0.55) 0%, transparent 40%); }
+  .hero--photo-band { min-height: 62vh; }
+  .hero--photo-band .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
