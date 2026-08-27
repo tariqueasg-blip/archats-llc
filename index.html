@@ -238,26 +238,18 @@
       <figure class="gallery__item g4"><img src="images/work-4.jpg" data-edit-id="work-4" alt="Siding installation" loading="lazy" /><figcaption>Siding · Queens</figcaption></figure>
       <figure class="gallery__item g5"><img src="images/work-5.jpg" data-edit-id="work-5" alt="Window installation" loading="lazy" /><figcaption>Window install · Long Island</figcaption></figure>
       <figure class="gallery__item g6"><img src="images/work-6.jpg" data-edit-id="work-6" alt="Flat roof work" loading="lazy" /><figcaption>Flat roof · Jersey</figcaption></figure>
-    </div>
-  lass="reels container">
-      <div class="reels__head">
-        <h3 class="reels__title">Full project reels</h3>
-        <p class="reels__sub">For the ones who like to watch the whole thing. Raw, unedited, from start to finish.</p>
-      </div>
-      <div class="reels__row">
-        <figure class="reel-card">
-          <video src="videos/reel-1.mp4" poster="images/work/reel-1-poster.jpg" controls playsinline preload="none"></video>
-          <figcaption>Reel 01 — full project</figcaption>
-        </figure>
-        <figure class="reel-card">
-          <video src="videos/reel-2.mp4" poster="images/work/reel-2-poster.jpg" controls playsinline preload="none"></video>
-          <figcaption>Reel 02 — full project</figcaption>
-        </figure>
-        <figure class="reel-card">
-          <video src="videos/reel-3.mp4" poster="images/work/reel-3-poster.jpg" controls playsinline preload="none"></video>
-          <figcaption>Reel 03 — full project</figcaption>
-        </figure>
-      </div>
+      <figure class="gallery__item gallery__item--video g7" data-video="videos/kitchen-full.mp4">
+        <video class="gallery__preview" src="videos/kitchen-preview.mp4" poster="images/work/kitchen-poster.jpg" muted loop playsinline preload="none"></video>
+        <span class="gallery__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="gallery__vid-tag">Full video</span>
+        <figcaption>Kitchen remodel · watch the full job</figcaption>
+      </figure>
+      <figure class="gallery__item gallery__item--video g8" data-video="videos/bathroom-full.mp4">
+        <video class="gallery__preview" src="videos/bathroom-preview.mp4" poster="images/work/bathroom-poster.jpg" muted loop playsinline preload="none"></video>
+        <span class="gallery__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="gallery__vid-tag">Full video</span>
+        <figcaption>Bathroom remodel · watch the full job</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -501,5 +493,15 @@
   <script src="js/main.js"></script>
   <script src="js/agent.js"></script>
   <script src="js/editor.js"></script>
+
+  <!-- Full-video modal (tap a gallery video to expand) -->
+  <div class="gallery-modal" id="galleryModal" aria-hidden="true">
+    <div class="gallery-modal__backdrop" data-close-modal></div>
+    <div class="gallery-modal__stage">
+      <button class="gallery-modal__close" data-close-modal aria-label="Close">&#10005;</button>
+      <video id="galleryModalVideo" controls playsinline preload="metadata"></video>
+    </div>
+  </div>
+
 </body>
 </html>

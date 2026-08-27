@@ -110,3 +110,47 @@ document.getElementById('deviceBackdrop').addEventListener('click', () => openDe
 if (new URLSearchParams(location.search).has('preview')) {
   document.body.classList.add('preview-mode');
 }
+
+// ── Gallery video tiles: hover preview + tap-to-expand full playback ──
+(function () {
+  const modal = document.getElementById('galleryModal');
+  const mVideo = document.getElementById('galleryModalVideo');
+  const tiles = document.querySelectorAll('.gallery__item--video');
+  let active = null;
+
+  function openModal(src) {
+    mVideo.src = src;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    mVideo.play().catch(function () {});
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    mVideo.pause();
+    mVideo.removeAttribute('src');
+    mVideo.load();
+  }
+
+  tiles.forEach(function (tile) {
+    const v = tile.querySelector('.gallery__preview');
+    // desktop hover = silent preview clip
+    tile.addEventListener('mouseenter', function () {
+      if (v && v.paused) { v.muted = true; v.play().catch(function () {}); }
+    });
+    tile.addEventListener('mouseleave', function () {
+      if (v) { v.pause(); v.currentTime = 0; }
+    });
+    // tap / click = expand and play the full video with sound
+    tile.addEventListener('click', function () {
+      openModal(tile.dataset.video);
+    });
+  });
+
+  document.querySelectorAll('[data-close-modal]').forEach(function (el) {
+    el.addEventListener('click', closeModal);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+})();
