@@ -75,7 +75,7 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
       })
       .catch(() => {
         if (btn) { btn.disabled = false; btn.textContent = 'Request Free Estimate'; }
-        alert('Something went wrong. Please call (917) 780-9790 — Pop picks up.');
+        alert('Something went wrong. Please call (917) 780-9790 and ask for a callback.');
       });
   });
 })();

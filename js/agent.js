@@ -218,10 +218,10 @@
 
   const MENU_QUICK = [
     { label: 'Get a free estimate', value: 'estimate' },
-    { label: 'Speak to a live person', value: 'live' },
     { label: 'What services do you offer?', value: 'services' },
     { label: 'Do you serve my area?', value: 'areas' },
     { label: 'Hours & contact', value: 'hours' },
+    { label: 'Speak to a live person', value: 'live' },
   ];
 
   // Lead endpoint — free FormSubmit relay to the business inbox (lands on Pop's phone).
@@ -233,7 +233,7 @@
   // ============================================================
   function startLiveChat() {
     clearQuick();
-    reply('Putting you through to the family. Pop answers every message personally.', null);
+    reply('Putting you through to the family — a real person answers every message.', null);
     const div = document.createElement('div');
     div.className = 'chat__live';
     div.innerHTML =
@@ -245,7 +245,7 @@
         '<input type="text" class="live-name" placeholder="Your name" />' +
         '<input type="tel" class="live-phone" placeholder="Phone number" />' +
         '<textarea class="live-msg" rows="2" placeholder="What are you working on?"></textarea>' +
-        '<button type="button" class="live-submit btn btn--solid">Send to Pop</button>' +
+        '<button type="button" class="live-submit btn btn--solid">Send my message</button>' +
         '<p class="lead-err"></p>' +
       '</div>' +
       '<p class="chat__live-note">This goes straight to the family — no bots, no call centers. You will get a text or call back shortly.</p>';
@@ -258,7 +258,7 @@
       const msg = div.querySelector('.live-msg').value.trim();
       const err = div.querySelector('.lead-err');
       if (!name || !phone) {
-        err.textContent = 'Please add your name and phone number so Pop can reach you.';
+        err.textContent = 'Please add your name and phone number so we can reach you.';
         return;
       }
       err.textContent = '';
@@ -267,18 +267,18 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
-          _subject: 'LIVE PERSON lead — ' + name,
+          _subject: 'Direct message — ' + name,
           name: name, phone: phone, message: msg || 'No message',
           _template: 'table',
         }),
       })
         .then((r) => r.json())
         .then(() => {
-          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>● Sent to Pop</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Your message is in. Expect a text or call back shortly — usually the same day. Thanks for reaching out to the family. 🙌</p>';
+          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>● Sent to the family</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Your message is in. Expect a text or call back shortly — usually the same day. Thanks for reaching out. 🙌</p>';
           chatBody.scrollTop = chatBody.scrollHeight;
         })
         .catch(() => {
-          err.textContent = 'Could not send. Please call (917) 780-9790 — Pop picks up.';
+          err.textContent = 'Could not send. Please call (917) 780-9790 and ask for a callback.';
           div.querySelector('.live-submit').disabled = false;
         });
     });
@@ -310,7 +310,7 @@
     }
 
     // --- live person (special direct line) ---
-    if (has(t, ['live', 'live person', 'speak to a live', 'talk to a live', 'real human', 'human being', 'pop'])) {
+    if (has(t, ['live', 'live person', 'speak to a live', 'talk to a live', 'real human', 'human being'])) {
       startLiveChat();
       return;
     }
