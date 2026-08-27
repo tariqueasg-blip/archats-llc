@@ -564,6 +564,9 @@ body.edit-mode .editor-bar { opacity: 1; pointer-events: auto; transform: transl
   .crop__hint { display: none; }
   .crop__zoom input[type=range] { width: 110px; }
   .edit-toggle span, .dev-btn span { display: none; }
+#editToggle span { display: inline; }
+#editToggle { background: var(--orange, #E8540A); border-color: rgba(255,255,255,0.28); }
+#editToggle:hover { background: #f06520; }
   .editor-bar__hint { display: none; }
 }
 
