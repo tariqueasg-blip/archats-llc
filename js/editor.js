@@ -99,6 +99,7 @@
   bar.hidden = true;
   bar.innerHTML =
     '<span class="dev-bar__hint">Click any photo to replace it</span>' +
+    '<button id="devDownloadAll">Download all edits</button>' +
     '<button id="devReset">Reset all edits</button>' +
     '<button id="devDone" class="dev-bar__solid">Done</button>';
   document.body.appendChild(bar);
@@ -206,6 +207,24 @@
   }
   editToggle.addEventListener('click', () => setEditMode(!editing));
   $('devDone').addEventListener('click', () => setEditMode(false));
+  // Export every edited photo as files (lands in Downloads; we commit them to ship)
+  $('devDownloadAll').addEventListener('click', async () => {
+    try {
+      const records = await idbAll();
+      if (!records.length) { alert('No edits yet — click a photo and replace it first.'); return; }
+      const btn = $('devDownloadAll');
+      btn.textContent = 'Downloading…';
+      for (const rec of records) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(rec.blob);
+        a.download = rec.id + '-enhanced.jpg';
+        a.click();
+        await new Promise((r) => setTimeout(r, 350));
+      }
+      btn.textContent = 'Download all edits';
+      alert('Saved ' + records.length + ' edited photo' + (records.length > 1 ? 's' : '') + ' to your Downloads.');
+    } catch (e) { alert('Export failed: ' + e.message); }
+  });
   $('devReset').addEventListener('click', async () => {
     if (!confirm('Reset all image edits back to the originals?')) return;
     await idbClear();
