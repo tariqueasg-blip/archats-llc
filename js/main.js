@@ -187,3 +187,13 @@ counters.forEach((c) => countIO.observe(c));
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 })();
+
+// ── Dev editor gate (customers never see this) ──
+// Only a URL with ?dev=1 loads the PIN-gated editor tooling.
+(function () {
+  if (new URLSearchParams(location.search).get('dev') === '1') {
+    var s = document.createElement('script');
+    s.src = 'js/dev-loader.js';
+    document.head.appendChild(s);
+  }
+})();
