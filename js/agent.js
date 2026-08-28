@@ -278,7 +278,7 @@
       })
         .then((r) => r.json())
         .then(() => {
-          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>● Sent to the family</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Your message is in. Expect a text or call back shortly — usually the same day. Thanks for reaching out. 🙌</p>';
+          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>● Sent to the family</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Thank you — someone from the family will get back to you shortly. Your message is in good hands. 🙌</p>';
           chatBody.scrollTop = chatBody.scrollHeight;
         })
         .catch(() => {
