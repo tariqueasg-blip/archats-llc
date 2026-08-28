@@ -85,14 +85,14 @@
   function $id(id) { return document.getElementById(id); }
   let tries = 0;
   function tryUnlock() {
-    if (input.value === PIN) {
+    if (input.value.trim() === PIN) {
       sessionStorage.setItem('archats_dev', '1');
       modal.remove();
       loadEditor();
       return;
     }
     tries++;
-    err.textContent = tries >= 3 ? 'Too many tries — refresh the page to try again.' : 'Incorrect PIN. Try again.';
+    err.textContent = tries >= 3 ? 'Too many tries — refresh the page to try again.' : 'Incorrect PIN. Case-sensitive, all lowercase — try again.';
     input.value = '';
     input.focus();
     if (tries >= 3) { $id('devPinGo').disabled = true; }

@@ -228,7 +228,7 @@
   // Lead endpoint — free FormSubmit relay. Change LEAD_EMAIL to deliver elsewhere.
   const LEAD_EMAIL = 'archatsllc@gmail.com';
   const LIVE_ENDPOINT = 'https://formsubmit.co/ajax/' + LEAD_EMAIL;
-  const BIZ_PHONE = '917-780-9790'; // included in every lead so we're always ready to call back
+  const BIZ_PHONE = '917-780-9790'; // included in every lead so we’re always ready to call back
 
   // ============================================================
   // "Speak to a live person" — the special direct-line box.
@@ -242,7 +242,7 @@
     div.innerHTML =
       '<div class="chat__live-head">' +
         '<span class="chat__live-avatar">A</span>' +
-        '<div><strong>The Archats family</strong><span>● Live · replies fast</span></div>' +
+        '<div><strong>The Archats family</strong><span>Direct line — no call centers</span></div>' +
       '</div>' +
       '<div class="chat__live-form">' +
         '<input type="text" class="live-name" placeholder="Your name" />' +
@@ -278,7 +278,7 @@
       })
         .then((r) => r.json())
         .then(() => {
-          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>● Sent to the family</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Thank you — someone from the family will get back to you shortly. Your message is in good hands. 🙌</p>';
+          div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>Sent to the family</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Thank you — someone from the family will get back to you shortly. Your message is in good hands.</p>';
           chatBody.scrollTop = chatBody.scrollHeight;
         })
         .catch(() => {
@@ -291,7 +291,7 @@
   function route(t) {
     // --- greeting ---
     if (has(t, ['hi', 'hello', 'hey', 'hiya', 'good morning', 'good afternoon', 'good evening']) && t.length < 22) {
-      return think('Hi there! 👋 I can answer questions about our services, pricing, and areas, or get you a free estimate. What can I help with?', MENU_QUICK);
+      return think('Hi — I’m the Archats assistant. I can help with services, pricing, service areas, or get you a free estimate. What would you like to know?', MENU_QUICK);
     }
 
     // --- menu / back ---
@@ -301,7 +301,7 @@
 
     // --- special / promo ---
     if (has(t, ['special', 'promo', 'promotion', 'deal', 'discount', 'sale', 'coupon', 'free toilet', 'electric toilet', 'bidet', 'toilet'])) {
-      return think('Yes! 🎁 Right now we are running a <b>special</b>: get a <b>FREE electric toilet</b> with every full bathroom remodel. It is not advertised everywhere, so be sure to ask about it when you schedule your estimate. Want to book a free estimate?', [
+      return think('Yes — right now we’re running a <b>special</b>: a <b>FREE electric toilet</b> with every full bathroom remodel. It isn’t advertised everywhere, so be sure to mention it when you schedule your estimate. Want to book a free estimate?', [
         { label: 'Book bathroom estimate', value: 'estimate' },
         { label: 'What other services?', value: 'services' },
       ]);
@@ -434,8 +434,8 @@
       return think('Thanks for stopping by. We are here whenever you need us. Take care!', null);
     }
 
-    // --- fallback: didn't understand → steer to a known topic or a human ---
-    return think("I didn't quite catch that, and I don't want you to miss out. I can answer questions about our services, pricing, hours, and areas, or take your name and number so a real person can call you back. Which would you like?", [
+    // --- fallback: didn’t understand → steer to a known topic or a human ---
+    return think("I didn’t quite catch that, and I don’t want you to miss out. I can answer questions about our services, pricing, hours, and areas, or take your name and number so a real person can call you back. Which would you like?", [
       { label: 'Get a free estimate', value: 'estimate' },
       { label: 'What services do you offer?', value: 'What services do you offer?' },
       { label: 'Hours & areas', value: 'hours' },
@@ -451,7 +451,7 @@
     chatPanel.setAttribute('aria-hidden', String(!open));
     if (open && !chatPanel.dataset.greeted) {
       chatPanel.dataset.greeted = '1';
-      setTimeout(() => think('Hi! 👋 I am the Archats assistant. Tap an option below and we will take it from there.', MENU_QUICK), 500);
+      setTimeout(() => think('Welcome — I’m the Archats assistant. Pick an option below and we’ll take it from there.', MENU_QUICK), 500);
     }
   }
   chatBtn.addEventListener('click', () => openChat(!chatPanel.classList.contains('open')));
