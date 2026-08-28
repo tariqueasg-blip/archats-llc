@@ -872,3 +872,21 @@ body.preview-mode .dev-toolbar { display: none; }
   .gallery-modal__sound:hover { background: rgba(55, 55, 60, 0.72); }
   .gallery-modal__sound:active { transform: scale(0.96); }
   .gallery-modal__sound .snd-ico { width: 18px; height: 18px; flex: none; opacity: 0.92; }
+
+  /* FAQ — clean details/summary, keyword-rich but human */
+  .faq__list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .faq__item {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    overflow: hidden; transition: box-shadow .25s ease;
+  }
+  .faq__item[open] { box-shadow: 0 10px 30px rgba(13, 27, 42, 0.08); }
+  .faq__item summary {
+    cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 16px 20px; font-weight: 600; font-size: 15px; color: var(--navy);
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary::after {
+    content: '+'; font-size: 20px; font-weight: 400; color: var(--orange); transition: transform .25s ease; flex: none;
+  }
+  .faq__item[open] summary::after { transform: rotate(45deg); }
+  .faq__item p { margin: 0; padding: 0 20px 18px; font-size: 14.5px; line-height: 1.65; color: #4b5563; }
