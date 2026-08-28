@@ -11,6 +11,12 @@
    ============================================================ */
 (function () {
   const PIN = 'archats2026'; // change by editing this line
+  const LOCKED = false; // TEMPORARY: false = open for quick photo swaps (no PIN). Flip to true when done to re-lock.
+
+  if (!LOCKED) {
+    loadEditor();
+    return;
+  }
 
   if (sessionStorage.getItem('archats_dev') === '1') {
     loadEditor();
