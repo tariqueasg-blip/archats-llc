@@ -291,7 +291,7 @@
   function route(t) {
     // --- greeting ---
     if (has(t, ['hi', 'hello', 'hey', 'hiya', 'good morning', 'good afternoon', 'good evening']) && t.length < 22) {
-      return think('Hi — I’m the Archats assistant. I can help with services, pricing, service areas, or get you a free estimate. What would you like to know?', MENU_QUICK);
+      return think('Hi — happy to help with services, pricing, service areas, or a free estimate. What would you like to know?', MENU_QUICK);
     }
 
     // --- menu / back ---
@@ -451,7 +451,7 @@
     chatPanel.setAttribute('aria-hidden', String(!open));
     if (open && !chatPanel.dataset.greeted) {
       chatPanel.dataset.greeted = '1';
-      setTimeout(() => think('Welcome — I’m the Archats assistant. Pick an option below and we’ll take it from there.', MENU_QUICK), 500);
+      setTimeout(() => think('Welcome — pick an option below and we’ll take it from there.', MENU_QUICK), 500);
     }
   }
   chatBtn.addEventListener('click', () => openChat(!chatPanel.classList.contains('open')));
