@@ -127,10 +127,25 @@ counters.forEach((c) => countIO.observe(c));
     const mv = mVideo(), md = modal();
     if (!mv || !md) return;
     mv.src = src;
+    mv.muted = true; // never start with sound — nobody wants a scare
+    const soundBtn = $('galleryModalSound');
+    if (soundBtn) {
+      soundBtn.classList.add('visible');
+      soundBtn.textContent = '🔇 Tap for sound';
+      soundBtn.dataset.on = '0';
+    }
     md.classList.add('open');
     md.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     mv.play().catch(function () {});
+  }
+  function toggleSound() {
+    const mv = mVideo(), soundBtn = $('galleryModalSound');
+    if (!mv || !soundBtn) return;
+    const on = soundBtn.dataset.on !== '1';
+    mv.muted = !on;
+    soundBtn.dataset.on = on ? '1' : '0';
+    soundBtn.textContent = on ? '🔊 Sound on' : '🔇 Tap for sound';
   }
   function closeModal() {
     const mv = mVideo(), md = modal();
@@ -138,7 +153,9 @@ counters.forEach((c) => countIO.observe(c));
     md.classList.remove('open');
     md.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    if (mv) { mv.pause(); mv.removeAttribute('src'); mv.load(); }
+    if (mv) { mv.pause(); mv.muted = true; mv.removeAttribute('src'); mv.load(); }
+    const soundBtn = $('galleryModalSound');
+    if (soundBtn) soundBtn.classList.remove('visible');
   }
 
   tiles.forEach(function (tile) {
@@ -156,8 +173,11 @@ counters.forEach((c) => countIO.observe(c));
     });
   });
 
-  document.querySelectorAll('[data-close-modal]').forEach(function (el) {
-    el.addEventListener('click', closeModal);
+  // Event delegation: the modal markup sits AFTER these scripts in the DOM,
+  // so direct lookups at load time would miss it. Delegate instead.
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('#galleryModalSound')) { toggleSound(); return; }
+    if (e.target.closest('[data-close-modal]')) closeModal();
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 })();

@@ -843,3 +843,15 @@ body.preview-mode .dev-toolbar { display: none; }
     background: linear-gradient(135deg, #ff6a1a, #e8540a);
     box-shadow: 0 6px 18px rgba(232, 84, 10, 0.42);
   }
+
+  /* Sound opt-in button — video always starts silent, sound is the visitor's choice */
+  .gallery-modal__sound {
+    position: absolute; right: 14px; bottom: 14px; z-index: 5;
+    display: none; align-items: center; gap: 6px;
+    background: rgba(9, 9, 11, 0.72); color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 999px;
+    padding: 8px 14px; font-family: var(--font-body); font-size: 12.5px; font-weight: 500;
+    cursor: pointer; backdrop-filter: blur(6px); transition: background 0.2s;
+  }
+  .gallery-modal__sound.visible { display: inline-flex; }
+  .gallery-modal__sound:hover { background: rgba(9, 9, 11, 0.9); }
