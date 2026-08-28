@@ -131,21 +131,27 @@ counters.forEach((c) => countIO.observe(c));
     const soundBtn = $('galleryModalSound');
     if (soundBtn) {
       soundBtn.classList.add('visible');
-      soundBtn.textContent = '🔇 Tap for sound';
-      soundBtn.dataset.on = '0';
+      setSoundUI(false);
     }
     md.classList.add('open');
     md.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     mv.play().catch(function () {});
   }
-  function toggleSound() {
-    const mv = mVideo(), soundBtn = $('galleryModalSound');
-    if (!mv || !soundBtn) return;
-    const on = soundBtn.dataset.on !== '1';
-    mv.muted = !on;
+  function setSoundUI(on) {
+    const soundBtn = $('galleryModalSound');
+    if (!soundBtn) return;
     soundBtn.dataset.on = on ? '1' : '0';
-    soundBtn.textContent = on ? '🔊 Sound on' : '🔇 Tap for sound';
+    const ico = on
+      ? '<svg class="snd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>'
+      : '<svg class="snd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>';
+    soundBtn.innerHTML = ico + '<span class="snd-label">' + (on ? 'Sound on' : 'Tap for sound') + '</span>';
+  }
+  function toggleSound() {
+    const mv = mVideo();
+    if (!mv) return;
+    mv.muted = !mv.muted;
+    setSoundUI(!mv.muted);
   }
   function closeModal() {
     const mv = mVideo(), md = modal();
