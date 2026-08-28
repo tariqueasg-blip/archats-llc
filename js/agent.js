@@ -28,29 +28,37 @@
   const SERVICES = [
     { key: 'kitchen', label: 'Kitchen Remodeling' },
     { key: 'bathroom', label: 'Bathroom Renovation' },
-    { key: 'roofing', label: 'Roofing' },
+    { key: 'roofing', label: 'Roofing (Repair & Replacement)' },
     { key: 'siding', label: 'Siding & Exterior' },
-    { key: 'additions', label: 'Additions' },
-    { key: 'basement', label: 'Basement' },
-    { key: 'painting', label: 'Painting' },
-    { key: 'flooring', label: 'Flooring' },
     { key: 'windows', label: 'Windows & Doors' },
-    { key: 'deck', label: 'Deck & Exterior' },
-    { key: 'other', label: 'Other / Not sure' },
+    { key: 'additions', label: 'Additions & Extensions' },
+    { key: 'basement', label: 'Basement Finishing' },
+    { key: 'waterproofing', label: 'Waterproofing' },
+    { key: 'drywall', label: 'Drywall & Plastering' },
+    { key: 'painting', label: 'Painting (Interior & Exterior)' },
+    { key: 'flooring', label: 'Flooring (Hardwood, Tile & Vinyl)' },
+    { key: 'tiling', label: 'Tiling & Tile Work' },
+    { key: 'cabinetry', label: 'Custom Cabinetry & Countertops' },
+    { key: 'deck', label: 'Deck & Porch' },
+    { key: 'repairs', label: 'General Repairs & Maintenance' },
   ];
 
   const SERVICE_ANSWERS = {
-    kitchen: 'We do full kitchen remodels: custom cabinets, islands, countertops, flooring, lighting, and complete gut renovations.',
-    bathroom: 'We renovate bathrooms top to bottom: tiling, vanities, fixtures, showers, tubs, and full layout changes.<br><br>💡 <b>Current special:</b> get a FREE electric toilet with every full bathroom remodel. Just ask about it when you book!',
-    roofing: 'We handle roof repairs and full replacements with quality materials, plus insurance paperwork when it applies.',
-    siding: 'We install and repair siding, trim, and exterior finishes to boost curb appeal and protection.',
-    additions: 'We build seamless home additions and extensions, handled from framing to finish in house.',
-    basement: 'We finish basements, waterproof, and build out extra living space.',
-    painting: 'We do interior and exterior painting with crisp, clean lines and quality prep.',
-    flooring: 'We install and refinish hardwood, tile, and vinyl flooring to spec.',
-    windows: 'We install and replace windows and doors, including framing and finishing.',
-    deck: 'We build and repair decks, patios, and outdoor living spaces.',
-    other: 'If it is a home improvement project, we likely handle it. Tell me a bit more and I will confirm.',
+    kitchen: 'Full kitchen remodels — custom cabinets, islands, countertops, flooring, lighting, and complete gut renovations, handled start to finish by our in-house crew.',
+    bathroom: 'Complete bathroom renovations — tiling, vanities, fixtures, showers, tubs, and full layout changes. We handle everything from demolition to the final finish.',
+    roofing: 'Roof repairs and full replacements with quality materials, including the insurance paperwork when it applies.',
+    siding: 'Siding and exterior installation and repair — trim, cladding, and curb-appeal upgrades that also protect your home.',
+    windows: 'Window and door installation and replacement, including framing and finishing.',
+    additions: 'Seamless home additions and extensions, framed and finished entirely in house.',
+    basement: 'Basement finishing, waterproofing, and full build-outs for extra living space.',
+    waterproofing: 'Basement and foundation waterproofing — we stop the water at the source and keep the space dry.',
+    drywall: 'Drywall and plastering — new walls, patching, and repairs, finished smooth and ready to paint.',
+    painting: 'Interior and exterior painting with careful prep and crisp, clean lines.',
+    flooring: 'Hardwood, tile, and vinyl flooring — installation and refinishing, done to spec.',
+    tiling: 'Professional tile work — floors, walls, showers, and backsplashes, installed straight and true.',
+    cabinetry: 'Custom cabinetry and countertops, built to fit your space and your taste.',
+    deck: 'Decks, patios, and porches — new builds and repairs for outdoor living spaces.',
+    repairs: 'From a leaky faucet or drywall patch to structural fixes — repairs of every size, plus routine maintenance.',
   };
 
   // ============================================================
@@ -162,7 +170,7 @@
       ? 'We received your request and someone from the team will get back to you <b>shortly</b> (usually within the hour during business hours).'
       : 'We received your request. We are currently closed, so someone will reach out <b>first thing the next business day</b>.';
     reply(
-      'You are all set' + name + '! ✅<br><br>' + when +
+      'You are all set' + name + '!<br><br>' + when +
       (l.time && l.time !== 'Best time to call' ? '<br>Preferred call time: ' + l.time.toLowerCase() + '.' : '') +
       '<br><br>Need us sooner? Call or text <a href="' + BIZ.phoneHref + '">' + BIZ.phone + '</a>.',
       [
@@ -330,8 +338,9 @@
     // --- services overview ---
     if (has(t, ['what do you do', 'what services', 'services', 'what kind of work'])) {
       const list = SERVICES.map((s) => s.label).join(', ');
-      return think('We are a full service general contractor. We handle:<br><br><b>' + list + '</b><br><br>Residential and light commercial, all done in house. Want a free estimate on something?', [
+      return think('We are a full-service general contractor handling everything from small repairs to complete renovations:<br><br><b>' + list + '</b><br><br>Residential and light commercial, all done in house. Would you like a free estimate for your project?', [
         { label: 'Get a free estimate', value: 'estimate' },
+        { label: 'Speak to a live person', value: 'live' },
       ]);
     }
 
@@ -339,15 +348,20 @@
     for (const s of SERVICES) {
       const synonyms = {
         kitchen: ['kitchen', 'cabinets', 'countertop', 'island'],
-        bathroom: ['bathroom', 'bath', 'shower', 'tub', 'vanity', 'tile'],
+        bathroom: ['bathroom', 'bath', 'shower', 'tub', 'vanity'],
         roofing: ['roof', 'roofing', 'shingle', 'leak'],
         siding: ['siding', 'exterior wall', 'cladding'],
-        additions: ['addition', 'extension', 'add a room', 'build out'],
-        basement: ['basement', 'cellar', 'waterproof'],
-        painting: ['paint', 'painting', 'repaint'],
-        flooring: ['floor', 'flooring', 'hardwood', 'vinyl', 'laminate'],
         windows: ['window', 'door', 'windows', 'doors'],
+        additions: ['addition', 'extension', 'add a room', 'build out'],
+        basement: ['basement', 'cellar', 'finish the basement'],
+        waterproofing: ['waterproofing', 'water intrusion', 'damp'],
+        drywall: ['drywall', 'plaster', 'sheetrock', 'wall repair', 'ceiling repair'],
+        painting: ['paint', 'painting', 'repaint'],
+        flooring: ['floor', 'flooring', 'hardwood', 'vinyl', 'laminate', 'refinish'],
+        tiling: ['tile work', 'tiling', 'backsplash', 'grout'],
+        cabinetry: ['cabinetry', 'custom cabinets', 'countertops'],
         deck: ['deck', 'patio', 'porch', 'outdoor'],
+        repairs: ['repair', 'maintenance', 'fix', 'handyman', 'small job', 'minor'],
       }[s.key] || [s.key.toLowerCase()];
       if (t.length <= 45 && has(t, synonyms)) {
         return think(SERVICE_ANSWERS[s.key] + '<br><br>Would you like a free estimate for your ' + s.key + ' project?', [
@@ -428,14 +442,14 @@
 
     // --- thanks / bye ---
     if (has(t, ['thanks', 'thank you', 'thx', 'appreciate'])) {
-      return think('Anytime! If a project comes up, I am here 24/7.', MENU_QUICK);
+      return think('Anytime — glad to help. If a project comes up, just reach out.', MENU_QUICK);
     }
     if (has(t, ['bye', 'goodbye', 'see you', 'later'])) {
       return think('Thanks for stopping by. We are here whenever you need us. Take care!', null);
     }
 
     // --- fallback: didn’t understand → steer to a known topic or a human ---
-    return think("I didn’t quite catch that, and I don’t want you to miss out. I can answer questions about our services, pricing, hours, and areas, or take your name and number so a real person can call you back. Which would you like?", [
+    return think("I didn’t quite catch that. I’m happy to help with services, pricing, hours, and service areas — or you can leave your name and number and a real person will call you back. Which would you prefer?", [
       { label: 'Get a free estimate', value: 'estimate' },
       { label: 'What services do you offer?', value: 'What services do you offer?' },
       { label: 'Hours & areas', value: 'hours' },
