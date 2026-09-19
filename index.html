@@ -71,6 +71,9 @@
     ]
   }
   </script>
+
+  <!-- Analytics: visitor counts, source attribution, conversion events -->
+  <script src="js/analytics.js?v=1"></script>
 </head>
 <body>
 
@@ -446,6 +449,7 @@
         </div>
 
         <form class="form" id="estimateForm">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none" />
           <div class="form__row">
             <label>Full name<input type="text" name="name" placeholder="John Smith" required /></label>
             <label>Phone<input type="tel" name="phone" placeholder="(917) 780-9790" required /></label>
@@ -516,8 +520,8 @@
 
 
 
-  <script src="js/main.js?v=3"></script>
-  <script src="js/agent.js?v=3"></script>
+  <script src="js/main.js?v=4"></script>
+  <script src="js/agent.js?v=4"></script>
   
   <!-- Full-video modal (tap a gallery video to expand) -->
   <div class="gallery-modal" id="galleryModal" aria-hidden="true">

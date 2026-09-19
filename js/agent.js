@@ -72,6 +72,10 @@
   // ============================================================
   // Message rendering
   // ============================================================
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
   function addMsg(text, who) {
     const p = document.createElement('p');
     p.className = 'chat__msg chat__msg--' + who;
@@ -164,7 +168,7 @@
 
   function finishLead(l) {
     saveLead({ ts: Date.now(), ...l });
-    const name = l.name ? ' ' + l.name.split(' ')[0] : '';
+    const name = l.name ? ' ' + esc(l.name.split(' ')[0]) : '';
     const open = businessStatus().open;
     const when = open
       ? 'We received your request and someone from the team will get back to you <b>shortly</b> (usually within the hour during business hours).'
@@ -181,20 +185,26 @@
   }
 
   function saveLead(l) {
+    if (window.Archats) window.Archats.track('chat_lead', { form: 'chat' });
     try {
       const all = JSON.parse(localStorage.getItem('archats_leads') || '[]');
       all.push(l);
       localStorage.setItem('archats_leads', JSON.stringify(all));
     } catch (e) { /* ignore */ }
-    if (LEAD_ENDPOINT) {
-      try {
-        fetch(LEAD_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(l),
-        });
-      } catch (e) { /* ignore */ }
-    }
+    // Deliver to the family inbox so a chat lead is never lost in this browser.
+    try {
+      fetch(LIVE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Chat quote request — ' + (l.name || ''),
+          name: l.name || '', phone: l.phone || '', service: l.service || '', time: l.time || '',
+          callback: BIZ_PHONE,
+          source: window.Archats ? window.Archats.label() : '',
+          _template: 'table',
+        }),
+      }).catch(function () {});
+    } catch (e) { /* ignore */ }
   }
 
   // ============================================================
@@ -281,11 +291,13 @@
           _subject: 'Direct message — ' + name,
           name: name, phone: phone, message: msg || 'No message',
           callback: BIZ_PHONE,
+          source: window.Archats ? window.Archats.label() : '',
           _template: 'table',
         }),
       })
         .then((r) => r.json())
         .then(() => {
+          if (window.Archats) window.Archats.track('chat_lead', { form: 'live_chat' });
           div.innerHTML = '<div class="chat__live-head"><span class="chat__live-avatar">A</span><div><strong>Got it!</strong><span>Sent to the family</span></div></div><p style="font-size:13px;color:var(--navy);margin:6px 0 0;">Thank you — someone from the family will get back to you shortly. Your message is in good hands.</p>';
           chatBody.scrollTop = chatBody.scrollHeight;
         })

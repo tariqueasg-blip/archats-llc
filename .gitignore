@@ -1,0 +1,5 @@
+.DS_Store
+.tmp/
+work/
+*.log
+node_modules/

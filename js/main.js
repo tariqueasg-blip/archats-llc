@@ -53,9 +53,16 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
   if (!form) return;
   const ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com'; // swap email here to re-route leads
   const btn = form.querySelector('button[type="submit"]');
+  const formLoadedAt = Date.now();
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
+    // Spam guards: honeypot must be empty; a human takes more than ~2s to fill this out.
+    const honey = form.querySelector('[name="_honey"]');
+    if ((honey && honey.value) || Date.now() - formLoadedAt < 2000) {
+      form.innerHTML = '<div style="text-align:center;padding:30px 10px;"><h3 style="color:var(--navy);margin:0 0 8px;">Request received!</h3><p style="color:#6b7280;margin:0;">Thanks — the family will reach out shortly, usually the same day.</p></div>';
+      return;
+    }
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     const fd = new FormData(form);
     const payload = {
@@ -63,6 +70,7 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
       name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email'),
       service: fd.get('service'), message: fd.get('message') || '',
       callback: '917-780-9790',
+      source: window.Archats ? window.Archats.label() : '',
       _template: 'table',
     };
     fetch(ENDPOINT, {
@@ -72,6 +80,7 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
     })
       .then((r) => r.json())
       .then(() => {
+        if (window.Archats) window.Archats.track('generate_lead', { form: 'estimate', service: fd.get('service') || '' });
         form.innerHTML = '<div style="text-align:center;padding:30px 10px;"><h3 style="color:var(--navy);margin:0 0 8px;">Request received!</h3><p style="color:#6b7280;margin:0;">Thanks — the family will reach out shortly, usually the same day.</p></div>';
       })
       .catch(() => {
