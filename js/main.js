@@ -197,10 +197,12 @@ counters.forEach((c) => countIO.observe(c));
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 })();
 
-// ── Dev editor gate (customers never see this) ──
-// Only a URL with ?dev=1 loads the PIN-gated editor tooling.
+// ── Dev editor gate — LOCAL ONLY ──
+// Loads the PIN-gated image editor only from this machine (localhost / 127.0.0.1 / file://).
+// Never active on the public site.
 (function () {
-  if (new URLSearchParams(location.search).get('dev') === '1') {
+  var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'file:';
+  if (local && new URLSearchParams(location.search).get('dev') === '1') {
     var s = document.createElement('script');
     s.src = 'js/dev-loader.js';
     document.head.appendChild(s);
