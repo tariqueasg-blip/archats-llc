@@ -3,3 +3,7 @@
 work/
 *.log
 node_modules/
+
+# local-only dev tooling — never publish
+js/dev-loader.js
+js/editor.js
