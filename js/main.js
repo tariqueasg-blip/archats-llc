@@ -208,3 +208,26 @@ counters.forEach((c) => countIO.observe(c));
     document.head.appendChild(s);
   }
 })();
+
+// ── Contact hydration — tap-to-call / mail without a plaintext number in the HTML ──
+// The phone + address are assembled at runtime (char codes) so naive scrapers/spiders
+// can't harvest them straight from the page source. Deterrent, not a fortress.
+(function () {
+  function ready(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+  ready(function () {
+    var n = String.fromCharCode(57, 49, 55, 55, 56, 48, 57, 55, 57, 48); // digits
+    var telText = '(' + n.slice(0, 3) + ') ' + n.slice(3, 6) + '-' + n.slice(6);
+    var mail = ['archatsllc', 'gmail.com'].join(String.fromCharCode(64));
+    document.querySelectorAll('[data-tel]').forEach(function (a) {
+      a.setAttribute('href', 'tel:+1' + n);
+      var s = a.querySelector('.teltext'); if (s) s.textContent = telText;
+    });
+    document.querySelectorAll('[data-mail]').forEach(function (a) {
+      a.setAttribute('href', 'mail' + 'to:' + mail);
+      var s = a.querySelector('.mailtext'); if (s) s.textContent = mail;
+    });
+  });
+})();

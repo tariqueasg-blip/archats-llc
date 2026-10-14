@@ -168,29 +168,16 @@ ul, ol { list-style: none; }
   line-height: 1.06;
   letter-spacing: -0.5px;
   margin: 18px 0 20px;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
 }
 .hero__accent { color: var(--orange); }
-.hero__sub { font-size: 17.5px; color: rgba(255, 255, 255, 0.82); max-width: 540px; text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5); }
+.hero__sub { font-size: 17.5px; color: rgba(255, 255, 255, 0.82); max-width: 540px; }
 .hero__cta { display: flex; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
-.hero__meta { display: flex; gap: 38px; margin-top: 44px; }
+.hero__meta {
+  display: flex; gap: 38px; margin-top: 44px;
+}
 .hero__meta li { display: flex; flex-direction: column; }
 .hero__meta strong { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: #fff; }
 .hero__meta span { font-size: 13px; color: rgba(255, 255, 255, 0.65); }
-
-.hero__card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  padding: 26px 30px;
-  display: flex; flex-direction: column; gap: 4px;
-  flex-shrink: 0;
-  transform: rotate(2deg);
-}
-.hero__card-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange-2); font-weight: 600; }
-.hero__card-num { font-family: var(--font-display); font-size: 34px; font-weight: 800; }
-.hero__card-sub { font-size: 13px; color: rgba(255, 255, 255, 0.7); }
 
 /* ---------- Kicker / Section head ---------- */
 .kicker {
@@ -223,7 +210,7 @@ ul, ol { list-style: none; }
 .marquee { background: var(--orange); color: #fff; overflow: hidden; padding: 16px 0; border-top: 1px solid rgba(0,0,0,0.06); }
 .marquee__track { display: flex; gap: 34px; white-space: nowrap; width: max-content; animation: marquee 32s linear infinite; }
 .marquee__track span { font-family: var(--font-display); font-weight: 700; font-size: 15px; letter-spacing: 0.3px; }
-.marquee__track i { font-style: normal; opacity: 0.6; }
+.marquee__track i { font-style: normal; opacity: 0.5; font-size: 11px; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- Services ---------- */
@@ -255,24 +242,16 @@ ul, ol { list-style: none; }
   display: flex; align-items: center; gap: 10px;
   padding: 10px 15px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #ff7a1a, #e8540a);
+  background: var(--orange-deep);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 26px -10px rgba(232, 84, 10, 0.6);
+  box-shadow: 0 10px 26px -14px rgba(232, 84, 10, 0.55);
   overflow: hidden;
 }
 .promo-badge__icon { width: 18px; height: 18px; flex-shrink: 0; }
 .promo-badge__text { display: flex; flex-direction: column; line-height: 1.32; text-align: left; }
 .promo-badge__text b { font-family: var(--font-display); font-size: 10px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; }
 .promo-badge__text em { font-style: normal; font-size: 10.5px; font-weight: 600; opacity: 0.95; margin-top: 1px; }
-.promo-badge::after {
-  content: "";
-  position: absolute; top: 0; left: -45%;
-  width: 28%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: badgeShine 4s ease-in-out infinite;
-}
-@keyframes badgeShine { 0% { left: -45%; } 50% { left: 120%; } 100% { left: 120%; } }
 
 /* ---------- About ---------- */
 .about { display: grid; grid-template-columns: 1.15fr 1fr; gap: 70px; align-items: center; }
@@ -459,7 +438,6 @@ ul, ol { list-style: none; }
   .nav__toggle { display: flex; }
   .nav__mobile.open { display: flex; }
   .hero__inner { flex-direction: column; align-items: flex-start; }
-  .hero__card { display: none; }
   .services { grid-template-columns: repeat(2, 1fr); }
   .process { grid-template-columns: repeat(2, 1fr); }
   .about, .areas, .contact { grid-template-columns: 1fr; gap: 50px; }
@@ -600,7 +578,6 @@ body.edit-mode .editor-bar { opacity: 1; pointer-events: auto; transform: transl
 
 /* Floating glass card */
 @keyframes floaty { 0%, 100% { transform: translateY(0) rotate(2deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
-.hero__card { animation: floaty 7s ease-in-out infinite; }
 
 /* Button shine sweep */
 .btn--solid { position: relative; overflow: hidden; }
