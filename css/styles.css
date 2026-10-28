@@ -866,3 +866,8 @@ body.preview-mode .dev-toolbar { display: none; }
   }
   .faq__item[open] summary::after { transform: rotate(45deg); }
   .faq__item p { margin: 0; padding: 0 20px 18px; font-size: 14.5px; line-height: 1.65; color: #4b5563; }
+
+/* footer service column (used on the homepage too) */
+.footer__links--svc { flex-wrap: wrap; gap: 12px 22px; max-width: 100%; }
+.footer__links--svc a { font-size: 13px; color: rgba(255,255,255,.55); }
+.footer__links--svc a:hover { color: var(--orange-2); }
