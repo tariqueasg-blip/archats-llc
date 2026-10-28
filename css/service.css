@@ -140,3 +140,34 @@
   .sv-rellist { grid-template-columns: 1fr; }
   .sv-cta .btn, .sv-call__act .btn { width: 100%; justify-content: center; text-align: center; }
 }
+
+/* ── hero v2: photo beside the text, cropped for vertical job shots ── */
+.sv-hero { padding: 56px 0 84px; }
+.sv-hero__grid { width: min(1180px, 92%); margin: 0 auto; display: grid; grid-template-columns: 1.05fr .8fr; gap: 64px; align-items: center; }
+.sv-hero__txt { display: grid; gap: 20px; }
+.sv-hero__txt h1 { margin: 0; }
+.sv-hero__fig { width: 100%; margin: 0; }
+.sv-hero__fig img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 42%; border-radius: var(--radius-lg); }
+.sv-hero__fig--wide img { aspect-ratio: 4 / 3; object-position: center; }
+
+/* real job photos */
+.sv-work { padding: 0 0 88px; }
+.sv-work__head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+.sv-work__head .sv-h2 { margin: 0; }
+.sv-work__link { font-size: 13.5px; color: var(--grey); border-bottom: 1px solid #d9d9e0; padding-bottom: 2px; }
+.sv-work__link:hover { color: var(--ink); border-color: var(--ink); }
+.sv-work__strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.wk { display: block; border-radius: 12px; overflow: hidden; background: var(--paper-2); }
+.wk img { width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; transition: transform .4s var(--ease); }
+.wk:hover img { transform: scale(1.04); }
+
+@media (max-width: 960px) {
+  .sv-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+  .sv-hero__fig { order: -1; }
+  .sv-hero__fig img { aspect-ratio: 16 / 10; object-position: center 40%; max-height: 340px; }
+  .sv-work__strip { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .sv-hero { padding: 26px 0 52px; }
+  .sv-work__strip { grid-template-columns: repeat(2, 1fr); }
+}

@@ -41,6 +41,7 @@ CONTENT = [
         "title": "Kitchen Remodeling in Queens, NY | Archats LLC",
         "desc": "Full kitchen remodels in Queens: cabinets, countertops, layout changes, plumbing and electrical. Family owned, licensed and insured. Free estimate.",
         "img": "/images/service-kitchen.webp",
+        "hero": "/images/work/kitchen-poster.jpg",
         "alt": "Kitchen remodel with new cabinets and island",
         "lede": "Most Queens kitchens were laid out for a different decade, in a different kind of household. We rebuild them around how the room actually gets used — and we stay on the job until the last piece of trim is back on.",
         "body": [
@@ -85,6 +86,7 @@ CONTENT = [
         "title": "Bathroom Renovation in Queens, NY | Archats LLC",
         "desc": "Bathroom remodeling in Queens — tile, showers, vanities, layout changes and leak repairs. Waterproofing done properly. Licensed and insured, free estimate.",
         "img": "/images/service-bathroom.webp",
+        "hero": "/images/work/bathroom-poster.jpg",
         "alt": "Renovated bathroom with tiled shower",
         "lede": "A bathroom is the smallest room in the house and the one where shortcuts cost the most. Almost every bathroom we're called in to fix was failed waterproofing, not bad tile.",
         "body": [
@@ -506,6 +508,11 @@ def body(s):
         f'<details class="faq__item"><summary>{q}</summary><p>{a}</p></details>'
         for q, a in s["faqs"]
     )
+    work = ["archat-work-%d" % i for i in range(1, 7)]
+    work_strip = "".join(
+        f'<a class="wk" href="/#work"><img src="/images/work/{w}.webp" alt="Archats LLC project" loading="lazy" /></a>'
+        for w in work
+    )
     others = [c for c in CONTENT if c["slug"] in s["related"]]
     related = "".join(
         f'<a class="rel" href="/{o["slug"]}/"><img src="{o["img"]}" alt="{html.escape(o["alt"])}" loading="lazy" />'
@@ -515,20 +522,34 @@ def body(s):
     return f"""
   <main>
     <section class="sv-hero">
-      <div class="container sv-hero__in">
-        <nav class="crumbs" aria-label="Breadcrumb">
-          <a href="/">Home</a><span>/</span><a href="/#services">Services</a><span>/</span><b>{s['nav']}</b>
-        </nav>
-        <h1>{s['h1']}</h1>
-        <p class="sv-lede">{s['lede']}</p>
-        <div class="sv-cta">
-          <a href="/#contact" class="btn btn--solid btn--lg">Get a free estimate</a>
-          <a href="tel:{TEL}" class="btn btn--ghost btn--lg">Call {PHONE}</a>
+      <div class="container sv-hero__grid">
+        <div class="sv-hero__txt">
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a><span>/</span><a href="/#services">Services</a><span>/</span><b>{s['nav']}</b>
+          </nav>
+          <h1>{s['h1']}</h1>
+          <p class="sv-lede">{s['lede']}</p>
+          <div class="sv-cta">
+            <a href="/#contact" class="btn btn--solid btn--lg">Get a free estimate</a>
+            <a href="tel:{TEL}" class="btn btn--ghost btn--lg">Call {PHONE}</a>
+          </div>
+        </div>
+        <figure class="sv-hero__fig{' sv-hero__fig--wide' if s.get('hero') else ''}">
+          <img src="{s.get('hero') or s['img']}" alt="{html.escape(s['alt'])}" width="900" height="1125" />
+        </figure>
+      </div>
+    </section>
+
+    <section class="sv-work">
+      <div class="container">
+        <div class="sv-work__head">
+          <h2 class="sv-h2">From recent jobs</h2>
+          <a href="/#work" class="sv-work__link">See more work</a>
+        </div>
+        <div class="sv-work__strip">
+          {work_strip}
         </div>
       </div>
-      <figure class="sv-hero__fig">
-        <img src="{s['img']}" alt="{html.escape(s['alt'])}" width="1200" height="900" />
-      </figure>
     </section>
 
     <section class="sv-body">

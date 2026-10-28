@@ -11,3 +11,7 @@ js/editor.js
 # local QA / working files — never publish
 qa/
 _photo-sample/
+
+# real job photos under images/ must ship (the work/ rule above is for scratch dirs)
+!images/work/
+!images/work/**
