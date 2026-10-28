@@ -510,13 +510,14 @@ def body(s):
     )
     work = ["archat-work-%d" % i for i in range(1, 7)]
     work_strip = "".join(
-        f'<a class="wk" href="/#work"><img src="/images/work/{w}.webp" alt="Archats LLC project" loading="lazy" /></a>'
+        f'<a class="wk" href="/#work"><img src="/images/work/{w}.webp" alt="Recent Archats LLC project" loading="lazy" /></a>'
         for w in work
     )
     others = [c for c in CONTENT if c["slug"] in s["related"]]
     related = "".join(
-        f'<a class="rel" href="/{o["slug"]}/"><img src="{o["img"]}" alt="{html.escape(o["alt"])}" loading="lazy" />'
-        f'<span><strong>{o["nav"]}</strong><em>{o["h1"].split(" in ")[0]}</em></span></a>'
+        f'<a class="rel" href="/{o["slug"]}/">'
+        f'<span><strong>{o["nav"]}</strong><em>{o["h1"].split(" in ")[0]}</em></span>'
+        f'<i class="rel__go" aria-hidden="true">→</i></a>'
         for o in others
     )
     return f"""
@@ -534,31 +535,16 @@ def body(s):
             <a href="tel:{TEL}" class="btn btn--ghost btn--lg">Call {PHONE}</a>
           </div>
         </div>
-        <figure class="sv-hero__fig{' sv-hero__fig--wide' if s.get('hero') else ''}">
-          <img src="{s.get('hero') or s['img']}" alt="{html.escape(s['alt'])}" width="900" height="1125" />
-        </figure>
       </div>
     </section>
 
-    <section class="sv-work">
+    <section class="sv-intro">
       <div class="container">
-        <div class="sv-work__head">
-          <h2 class="sv-h2">From recent jobs</h2>
-          <a href="/#work" class="sv-work__link">See more work</a>
-        </div>
-        <div class="sv-work__strip">
-          {work_strip}
-        </div>
-      </div>
-    </section>
-
-    <section class="sv-body">
-      <div class="container sv-body__in">
         <div class="sv-prose">{body_html}</div>
-        <aside class="sv-facts">
-          <h2 class="sv-facts__h">What's included</h2>
+        <div class="sv-included">
+          <h2 class="sv-included__h">What's included</h2>
           <ul class="sv-check">{includes}</ul>
-        </aside>
+        </div>
       </div>
     </section>
 
@@ -569,7 +555,17 @@ def body(s):
       </div>
     </section>
 
-    <section class="sv-body">
+    <section class="sv-work">
+      <div class="container">
+        <div class="sv-work__head">
+          <h2 class="sv-h2">Recent jobs</h2>
+          <a href="/#work" class="sv-work__link">See more <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="sv-work__grid">{work_strip}</div>
+      </div>
+    </section>
+
+    <section class="sv-price-wrap">
       <div class="container sv-narrow">
         <h2 class="sv-h2">What moves the price</h2>
         <ul class="sv-price">{price}</ul>
@@ -581,13 +577,6 @@ def body(s):
       <div class="container sv-narrow">
         <h2 class="sv-h2">Questions we get asked</h2>
         <div class="faq__list">{faqs}</div>
-      </div>
-    </section>
-
-    <section class="sv-areas">
-      <div class="container">
-        <h2 class="sv-h2">Where we work</h2>
-        <p>New York based. We take {s['nav'].lower()} jobs across Queens — Astoria, Forest Hills, Flushing, Long Island City, Jackson Heights, Bayside, Woodside, Ridgewood — and into Brooklyn, the Bronx, Manhattan and Staten Island, plus Long Island and northern New Jersey.</p>
       </div>
     </section>
 
@@ -603,6 +592,7 @@ def body(s):
         <div>
           <h2>Ready to talk it through?</h2>
           <p>Tell us the room and roughly what you want. We'll come out, look at it properly, and give you a written estimate — free, no obligation.</p>
+          <p class="sv-call__areas">New York based — Queens, Brooklyn, the Bronx, Manhattan, Staten Island, Long Island and northern New Jersey.</p>
         </div>
         <div class="sv-call__act">
           <a href="/#contact" class="btn btn--solid btn--lg">Get a free estimate</a>
