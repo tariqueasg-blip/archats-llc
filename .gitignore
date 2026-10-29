@@ -15,3 +15,6 @@ _photo-sample/
 # real job photos under images/ must ship (the work/ rule above is for scratch dirs)
 !images/work/
 !images/work/**
+
+# photo drop — local only, curated copies get moved into images/
+_incoming/

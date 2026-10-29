@@ -623,7 +623,7 @@ FOOTER = f"""
       <p class="footer__copy">© 2026 Archats LLC. All rights reserved. · Licensed &amp; Insured</p>
     </div>
   </footer>
-  <script src="/js/main.js?v=5"></script>
+  <script src="/js/main.js?v=6"></script>
 </body>
 </html>
 """

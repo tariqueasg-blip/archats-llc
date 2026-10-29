@@ -51,28 +51,100 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
 (function () {
   const form = document.getElementById('estimateForm');
   if (!form) return;
-  const ENDPOINT = 'https://formsubmit.co/ajax/archatsllc@gmail.com'; // swap email here to re-route leads
+
+  // The destination address is assembled at runtime so it never appears in the
+  // source as a plain string for scrapers to harvest.
+  const _e = [97,114,99,104,97,116,115,108,108,99,64,103,109,97,105,108,46,99,111,109];
+  const ENDPOINT = 'https://formsubmit.co/ajax/' + String.fromCharCode.apply(null, _e);
+
   const btn = form.querySelector('button[type="submit"]');
   const formLoadedAt = Date.now();
+  const MIN_FILL_MS = 3000;     // a real person takes longer than this
+  const MAX_PER_DAY = 3;        // same browser, same day
+
+  const digits = (v) => String(v || '').replace(/\D/g, '');
+  const SPAM_WORDS = /\b(seo|backlinks?|guest post|crypto|bitcoin|forex|casino|loan|viagra|porn|escort|marketing services|web design services|rank your|increase your traffic|google ranking|bulk email|lead generation services)\b/i;
+  const URLISH = /(https?:\/\/|www\.|\.com\b|\.net\b|\.ru\b|\.xyz\b|\[url|<\/?a\s)/i;
+
+  function overDailyLimit() {
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const raw = JSON.parse(localStorage.getItem('archatsLeadCount') || '{}');
+      if (raw.day !== today) return false;
+      return (raw.n || 0) >= MAX_PER_DAY;
+    } catch (_) { return false; }
+  }
+  function bumpDailyLimit() {
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const raw = JSON.parse(localStorage.getItem('archatsLeadCount') || '{}');
+      const n = raw.day === today ? (raw.n || 0) + 1 : 1;
+      localStorage.setItem('archatsLeadCount', JSON.stringify({ day: today, n }));
+    } catch (_) {}
+  }
+
+  // Returns a short reason string when the submission should be dropped.
+  function spamReason(fd) {
+    const name = String(fd.get('name') || '').trim();
+    const phone = digits(fd.get('phone'));
+    const email = String(fd.get('email') || '').trim();
+    const message = String(fd.get('message') || '').trim();
+    const honey = form.querySelector('[name="_honey"]');
+
+    if (honey && honey.value) return 'honey';
+    if (Date.now() - formLoadedAt < MIN_FILL_MS) return 'too-fast';
+    if (overDailyLimit()) return 'rate';
+
+    if (name.length < 2 || name.length > 70) return 'name-length';
+    if (/[<>{}\[\]\\@]/.test(name) || /\d{4,}/.test(name)) return 'name-shape';
+    if (URLISH.test(name) || URLISH.test(message)) return 'url';
+
+    if (phone.length < 10 || phone.length > 11) return 'phone-length';
+    if (/^(\d)\1{6,}$/.test(phone)) return 'phone-repeat';
+    if (/^(0123456789|1234567890|9876543210)/.test(phone)) return 'phone-sequence';
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) return 'email-shape';
+
+    if (SPAM_WORDS.test(message) || SPAM_WORDS.test(name)) return 'words';
+    if (message.length > 4000) return 'message-length';
+
+    return '';
+  }
+
+  const thanks = '<div style="text-align:center;padding:30px 10px;"><h3 style="color:var(--navy);margin:0 0 8px;">Request received!</h3><p style="color:#6b7280;margin:0;">Thanks — the family will reach out shortly, usually the same day.</p></div>';
+
+  // Bots get the same success screen a human does, minus the email.
+  const quietlySucceed = () => { form.innerHTML = thanks; };
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!form.checkValidity()) { form.reportValidity(); return; }
-    // Spam guards: honeypot must be empty; a human takes more than ~2s to fill this out.
-    const honey = form.querySelector('[name="_honey"]');
-    if ((honey && honey.value) || Date.now() - formLoadedAt < 2000) {
-      form.innerHTML = '<div style="text-align:center;padding:30px 10px;"><h3 style="color:var(--navy);margin:0 0 8px;">Request received!</h3><p style="color:#6b7280;margin:0;">Thanks — the family will reach out shortly, usually the same day.</p></div>';
+
+    // Remove any previous inline error before validating again.
+    const oldErr = form.querySelector('.form__err');
+    if (oldErr) oldErr.remove();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
       return;
     }
-    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
     const fd = new FormData(form);
+    if (spamReason(fd)) { quietlySucceed(); return; }
+
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
     const payload = {
       _subject: 'Quote request — ' + (fd.get('name') || ''),
-      name: fd.get('name'), phone: fd.get('phone'), email: fd.get('email'),
-      service: fd.get('service'), message: fd.get('message') || '',
+      name: fd.get('name'),
+      phone: fd.get('phone'),
+      email: fd.get('email'),
+      service: fd.get('service'),
+      message: fd.get('message') || '',
       callback: '917-780-9790',
       source: window.Archats ? window.Archats.label() : '',
       _template: 'table',
     };
+
     fetch(ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -80,12 +152,17 @@ setTimeout(() => revealEls.forEach((el) => el.classList.add('in')), 3000);
     })
       .then((r) => r.json())
       .then(() => {
+        bumpDailyLimit();
         if (window.Archats) window.Archats.track('generate_lead', { form: 'estimate', service: fd.get('service') || '' });
-        form.innerHTML = '<div style="text-align:center;padding:30px 10px;"><h3 style="color:var(--navy);margin:0 0 8px;">Request received!</h3><p style="color:#6b7280;margin:0;">Thanks — the family will reach out shortly, usually the same day.</p></div>';
+        form.innerHTML = thanks;
       })
       .catch(() => {
         if (btn) { btn.disabled = false; btn.textContent = 'Request Free Estimate'; }
-        alert('Something went wrong. Please call (917) 780-9790 and ask for a callback.');
+        const err = document.createElement('p');
+        err.className = 'form__err';
+        err.style.cssText = 'margin:10px 0 0;font-size:13.5px;color:#b42318;';
+        err.innerHTML = 'That didn\'t send. Call <a href="tel:+19177809790" style="color:inherit;text-decoration:underline">(917) 780-9790</a> and we\'ll take the details over the phone.';
+        form.appendChild(err);
       });
   });
 })();
